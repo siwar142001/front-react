@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import Notification from "../utils/Notification";
 
@@ -27,11 +27,13 @@ export default function LoginForm() {
         localStorage.setItem("jwtToken", token);
 
         setLoggedIn(true);
+        window.location.href = '/';
 
         } catch (error) {
             setFailedLogIn(true);
         }
     }
+
     return (
         <>
         <form
@@ -56,7 +58,7 @@ export default function LoginForm() {
 
             <button type="submit" className="border-2 rounded w-30 m-4 px-4 py-1">Login</button>
 
-            <div>Create an account</div>
+            <a className="underline" href="/register">No account ? Create one here</a>
         </form>
 
         {loggedIn ? <Notification text="Connection successful" active={loggedIn} setActive={setLoggedIn}/> 

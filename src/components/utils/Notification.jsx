@@ -4,18 +4,17 @@ import { useEffect, useState } from "react";
 export default function Notification({ text, active, setActive }) {
     useEffect(() => {const timer = setTimeout(() => {
         setActive(false);
-    }, 5000);
+    }, 2000);
 
     return () => clearTimeout(timer) }, []);
-
         const [show, setShow] = useState(false);
-
         // Show the notification when active
         useEffect(() => {
             if (active) {
             setShow(true);
             }
         }, [active]);
+        
 
     return (
     <>
@@ -33,6 +32,5 @@ export default function Notification({ text, active, setActive }) {
           <IoMdCloseCircleOutline className="size-7.5 ml-4 text-red-500"/>
         </button>
       </div>
-    </>
-  );
+    </>);
 }
