@@ -18,10 +18,9 @@ export default function LoginForm() {
             },
         
         );
-        
-
+    
         // extract token
-        const token = response.data.access || response.data.token;
+        const token = response.data.access_token;
 
         // store token
         localStorage.setItem("jwtToken", token);
