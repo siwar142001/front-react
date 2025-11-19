@@ -9,10 +9,11 @@ export default function LoginForm() {
     e.preventDefault();
 
     try {
-      const response = await apiClient.post("/login/", {
+      const response = await apiClient.post("/login", {
         email,
         password,
-      }, { withCredentials: true }
+      },
+      
     );
 
       // extract token
@@ -29,7 +30,6 @@ export default function LoginForm() {
       alert("Login failed");
     }
   };
-
   return (
     <form
       onSubmit={handleLogin}
