@@ -1,9 +1,9 @@
+import BankAccounts from "../components/bank-account/BankAccounts";
 import DeleteButton from "../components/utils/DeleteButton"
+import { useState, useEffect } from "react";
 
 export default function Dashboard(){
     return(
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+        <BankAccounts/>
     )
 }

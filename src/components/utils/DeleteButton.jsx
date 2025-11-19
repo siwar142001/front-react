@@ -4,7 +4,7 @@ export default function DeleteButton(){
     return(
         <>
         <button>
-            <IoTrash/>
+            <IoTrash />
         </button>
         </>
     )
