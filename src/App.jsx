@@ -8,12 +8,12 @@ import History from "./pages/History.jsx";
 
 export default function App(){
     return(
-        <BrowserRouter>
+        <Routes>
             <Route path="/" element={<Dashboard/>}/>
             <Route path="/history" element={<History/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/transfer" element={<Transfer/>}/>
-        </BrowserRouter>
+        </Routes>
     )
 };
