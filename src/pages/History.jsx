@@ -31,14 +31,10 @@ export default function History() {
         });
 
         // Historique des transactions
-        // URL fournie par ton back : /transactions/history/{account_id}
-        const txRes = await apiClient.get(
-        `/transactions/history/${accountId}`,
-        {
-            signal: controller.signal,
-            params: { from_account_id: accountId },
-        }
-        );
+        const txRes = await apiClient.get(`/transactions/history/${accountId}`, {
+          signal: controller.signal,
+          params: { from_account_id: accountId },
+        });
 
         setAccount(accRes.data || null);
         setHistory(txRes.data || null);
@@ -73,7 +69,6 @@ export default function History() {
 
   const formatDate = (raw) => {
     if (!raw) return "";
-    // "2025-11-20 11:05:13" -> "2025-11-20T11:05:13"
     const isoLike = raw.replace(" ", "T");
     const d = new Date(isoLike);
     if (isNaN(d.getTime())) return raw;
@@ -147,15 +142,19 @@ export default function History() {
       ) : (
         <div className="space-y-4">
           {transactions.map((tx, index) => {
-            // D'après ton JSON : { type, to_account_id, amount, date, description }
-            const isDebit = tx.type === "virement"; // l'argent sort
+            const isDebit = tx.type === "virement"; // ici, historique = compte source
             const sign = isDebit ? "-" : "+";
             const amountClass = isDebit ? "text-red-600" : "text-green-600";
+            const formattedDate = tx.date
+              ? new Date(tx.date.replace(" ", "T")).toLocaleString("fr-FR")
+              : "";
 
             return (
-              <div
+              <Link
                 key={index}
-                className="bg-white shadow-md border border-gray-200 rounded-lg p-4"
+                to={`/transactions/history/${accountId}/${index}`}
+                state={{ tx, account, accountId }}
+                className="block bg-white shadow-md border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow"
               >
                 <p>
                   <strong>Type :</strong> {formatType(tx.type)}
@@ -175,7 +174,7 @@ export default function History() {
                 </p>
 
                 <p>
-                  <strong>Date :</strong> {formatDate(tx.date)}
+                  <strong>Date :</strong> {formattedDate}
                 </p>
 
                 {tx.description && (
@@ -183,7 +182,11 @@ export default function History() {
                     {tx.description}
                   </p>
                 )}
-              </div>
+
+                <p className="text-xs text-blue-600 mt-2 underline">
+                  Voir les détails →
+                </p>
+              </Link>
             );
           })}
         </div>
