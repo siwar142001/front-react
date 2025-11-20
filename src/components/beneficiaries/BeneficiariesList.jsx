@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import BeneficiaryCard from "./BeneficiaryCard";
 import CreateBeneficiaryModal from "./CreateBeneficiaryModal";
+import Notification from "../utils/Notification";
+import { useNavigate } from "react-router-dom";
 
 export default function BeneficiariesList(){
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isLoadingBeneficiaries, setIsLoadingBeneficiaries] = useState(true);
     const [beneficiaries, setBeneficiaries] = useState([]);
-    const [beneficiaryDeleted, setBeneficiaryDeleted] = useState([]);
+    const [beneficiaryDeleted, setBeneficiaryDeleted] = useState(false);
+    const [beneficiaryCreated, setBeneficiaryCreated] = useState(false);
     const [success, setSuccess] = useState("");
+
+    const navigate = useNavigate();
     
     useEffect(() => {
     const loadBeneficiaries = async () => {
@@ -28,16 +33,15 @@ export default function BeneficiariesList(){
 
     const handleBeneficiaryDeleted = (deletedId) => {
         setBeneficiaries((prev) => prev.filter((beneficiary) => beneficiary.id !== deletedId));
-        setSuccess("Bénéficiaire supprimé avec succès.");
-        setTimeout(() => setSuccess(""), 2000);
+        setTimeout(() => navigate(-1), 2000);
         setBeneficiaryDeleted(true);
     };
 
     const handleBeneficiaryCreated = (newBeneficiary) => {
         // On ajoute le nouveau compte en haut de la liste
         setBeneficiaries((prev) => [newBeneficiary, ...prev]);
-        setSuccess("Bénéficiaire créé avec succès.");
-        setTimeout(() => setSuccess(""), 2000);
+        setBeneficiaryCreated(true)
+        setTimeout(() => navigate(-1), 2000);
     };
 
     return(
@@ -74,6 +78,8 @@ export default function BeneficiariesList(){
                 onCreated={handleBeneficiaryCreated}
                 />}
             </section>
+
+            {beneficiaryDeleted ?  <Notification active={beneficiaryDeleted} setActive={setBeneficiaryDeleted} text={"Beneficiary deleted successfully."}/> : beneficiaryCreated ? <Notification active={beneficiaryCreated} setActive={setBeneficiaryCreated} text={"Beneficiary created successfully."}/> : null }
         </div>
     )
 }
