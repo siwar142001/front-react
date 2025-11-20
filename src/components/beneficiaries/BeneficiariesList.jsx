@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import BeneficiaryCard from "./BeneficiaryCard";
 import CreateBeneficiaryModal from "./CreateBeneficiaryModal";
+import Notification from "../utils/Notification";
+import { useNavigate } from "react-router-dom";
 
 export default function BeneficiariesList(){
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isLoadingBeneficiaries, setIsLoadingBeneficiaries] = useState(true);
     const [beneficiaries, setBeneficiaries] = useState([]);
-    const [beneficiaryDeleted, setBeneficiaryDeleted] = useState([]);
-    const [success, setSuccess] = useState("");
+    const [beneficiaryDeleted, setBeneficiaryDeleted] = useState(false);
+    const [beneficiaryCreated, setBeneficiaryCreated] = useState(false);
+
+    const navigate = useNavigate();
     
     useEffect(() => {
     const loadBeneficiaries = async () => {
@@ -36,8 +40,7 @@ export default function BeneficiariesList(){
     const handleBeneficiaryCreated = (newBeneficiary) => {
         // On ajoute le nouveau compte en haut de la liste
         setBeneficiaries((prev) => [newBeneficiary, ...prev]);
-        setSuccess("Bénéficiaire créé avec succès.");
-        setTimeout(() => setSuccess(""), 2000);
+        setBeneficiaryCreated(true)
     };
 
     return(
@@ -46,9 +49,6 @@ export default function BeneficiariesList(){
                 <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-semibold">Mes bénéficiaires</h2>
                     <div className="flex items-center gap-4">
-                        {success && (
-                        <span className="text-sm text-green-600">{success}</span>
-                        )}
                         <button
                         type="button"
                         onClick={() => setIsCreateOpen(true)}
@@ -65,7 +65,7 @@ export default function BeneficiariesList(){
                     <br />
                     Cliquez sur <span className="font-medium">« Ajouter un bénéficiaire »</span> pour en ajouter un.
                 </div>
-                ) : beneficiaries.map((beneficiary) => (<BeneficiaryCard key={beneficiary.to_account_id} beneficiary={beneficiary} handleBeneficiaryDeleted={handleBeneficiaryDeleted}/>))}
+                ) : beneficiaries.map((beneficiary) => (<BeneficiaryCard key={beneficiary.id} beneficiary={beneficiary} handleBeneficiaryDeleted={handleBeneficiaryDeleted}/>))}
         
                 {/* Modal de création de compte */}
                 {<CreateBeneficiaryModal
@@ -74,6 +74,9 @@ export default function BeneficiariesList(){
                 onCreated={handleBeneficiaryCreated}
                 />}
             </section>
+
+            {beneficiaryDeleted ?  <Notification active={beneficiaryDeleted} setActive={setBeneficiaryDeleted} text={"Beneficiary deleted successfully."}/> 
+            : beneficiaryCreated ? <Notification active={beneficiaryCreated} setActive={setBeneficiaryCreated} text={"Beneficiary created successfully."}/> : null }
         </div>
     )
 }

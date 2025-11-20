@@ -7,6 +7,7 @@ import Deposit from "./pages/Deposit.jsx";
 import History from "./pages/History.jsx";
 import Beneficiaries from "./pages/Beneficiaries.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
+import TransactionDetails from "./pages/TransactionDetails.jsx";
 
 export default function App(){
     return(
@@ -19,6 +20,7 @@ export default function App(){
             <Route path="/depot" element={<ProtectedRoute><Deposit /></ProtectedRoute>} /> 
             <Route path="/beneficiaries" element={<ProtectedRoute><Beneficiaries /></ProtectedRoute>} /> 
             <Route path="/transactions/history/:accountId" element={<History />} />
+            <Route path="/transactions/history/:accountId/:txIndex" element={<TransactionDetails />} />
 
         </Routes>
     )
