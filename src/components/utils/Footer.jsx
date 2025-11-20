@@ -3,6 +3,12 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { IoSendOutline } from "react-icons/io5";
 
 export default function Footer(){
+
+    function LogOut(){
+        localStorage.removeItem("jwtToken");   // delete token
+        navigate("/login");                    // redirect
+    }
+
     const navigate = useNavigate();
     return(
         <div class="fixed bottom-0 left-0 z-50 w-full h-16 bg-slate-500 border-t border-default">
@@ -15,9 +21,9 @@ export default function Footer(){
                     <FaMoneyBillTransfer className="size-7"/>
                     <span class="text-sm text-body">Transfer</span>
                 </button>
-                <button type="button" class="cursor-pointer inline-flex flex-col items-center justify-center px-5 hover:bg-slate-600">
+                <button type="button" onClick={() => LogOut()} class="cursor-pointer inline-flex flex-col items-center justify-center px-5 hover:bg-slate-600">
                     <svg class="w-6 h-6 mb-1 text-body group-hover:text-fg-brand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"/></svg>
-                    <span class="text-sm text-body">Settings</span>
+                    <span class="text-sm text-body">Log Out</span>
                 </button>
             </div>
         </div>
