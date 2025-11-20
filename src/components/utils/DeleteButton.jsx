@@ -11,7 +11,7 @@ export default function DeleteButton({ accountId, onDeleted }) {
     setError(null);
 
     try {
-      // appelle ton endpoint FastAPI de clôture
+      // appelle l'endpoint FastAPI de clôture
       await apiClient.post(`/accounts/close/${accountId}`);
 
       // on ferme la modale
