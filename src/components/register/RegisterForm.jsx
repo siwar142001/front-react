@@ -4,17 +4,18 @@ import Notification from "../utils/Notification";
 import { useNavigate } from "react-router-dom";
 
 
-export default function LoginForm() {
+export default function RegisterForm() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordValidate, setPasswordValidate] = useState("");
     const [registered, setRegistered] = useState(false);
     const [failedRegister, setFailedRegister] = useState(false);
+    const [birthdate, setBirthdate] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const registered = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem("jwtToken");
         if (token) {
             navigate("/");
         }
@@ -24,19 +25,17 @@ export default function LoginForm() {
         e.preventDefault();
 
         try {
-            const response = await apiClient.post("/user/create", {
+            await apiClient.post("/user/create/", {
             name,
             email,
             password,
             birthdate,
             });
 
-            const token = response.data.access_token;
-            localStorage.setItem("jwtToken", token);
+            setRegistered(true);
 
-            setLoggedIn(true); // 👈 triggers redirect effect
         } catch (error) {
-            setFailedLogIn(true);
+            setFailedRegister(true);
         }
     };
 
@@ -60,7 +59,7 @@ export default function LoginForm() {
                 className="border-2 rounded m-2 p-1 w-60"
                 type="text"
                 placeholder="Name..."
-                value={email}
+                value={name}
                 onChange={(e) => setName(e.target.value)}
             />
 
@@ -82,19 +81,19 @@ export default function LoginForm() {
 
             <input
                 className="border-2 rounded m-2 p-1 w-60"
-                type="password"
-                placeholder="Validate password..."
-                value={passwordValidate}
-                onChange={(e) => setPasswordValidate(e.target.value)}
+                type="date"
+                placeholder="Password..."
+                value={birthdate}
+                onChange={(e) => setBirthdate(e.target.value)}
             />
 
-            <button type="submit" className="border-2 rounded w-30 m-4 px-4 py-1">Login</button>
+            <button type="submit" className="border-2 rounded w-30 m-4 px-4 py-1">Register</button>
 
-            <a className="underline" href="/register">No account ? Create one here</a>
+            <a className="underline" href="/login">Back to login</a>
         </form>
 
-        {loggedIn ? <Notification text="Connection successful" active={loggedIn} setActive={setLoggedIn}/> 
-        : failedLogIn ? <Notification text="Connection Failed" active={failedLogIn} setActive={setFailedLogIn}/> : <></>}
+        {registered ? <Notification text="Account created successfully" active={registered} setActive={setRegistered}/> 
+        : failedRegister ? <Notification text="Account creation failed" active={failedRegister} setActive={setFailedRegister}/> : <></>}
         
         </>
     );
