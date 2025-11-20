@@ -36,7 +36,7 @@ export default function BeneficiariesScroller({beneficiaryId, setBeneficiaryId})
 
             <option value="">Sélectionnez un compte</option>
             {(beneficiaries.map((beneficiary) => (
-            <option key={beneficiary.to_ac} value={beneficiary.to_account_id}>{beneficiary.name}</option>)))}
+            <option key={beneficiary.id} value={beneficiary.to_account_id}>{beneficiary.name}</option>)))}
           </select>
           </> : "Aucun bénéficiaires enregistrés"}
         </div>
