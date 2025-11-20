@@ -90,7 +90,7 @@ function CreateAccountModal({ isOpen, onClose, onCreated }) {
   );
 }
 
-export default function BankAccounts() {
+export default function BankAccounts({ refreshKey = 0 }) {
   const [bankAccounts, setBankAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -110,8 +110,11 @@ export default function BankAccounts() {
       }
     };
 
-    loadBankAccounts();
-  }, []);
+    loadBankAccounts();}, 
+
+    
+    [refreshKey]); 
+  
 
   const handleAccountDeleted = (deletedId) => {
     setBankAccounts((prev) => prev.filter((acc) => acc.id !== deletedId));
@@ -123,7 +126,7 @@ export default function BankAccounts() {
 
 
 
-     
+
   };
 
  

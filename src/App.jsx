@@ -13,6 +13,8 @@ export default function App(){
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/transfer" element={<Transfer/>}/>
+            {/* alias en français pour garder les liens /transfert fonctionnels */}
+            <Route path="/transfert" element={<Transfer/>}/>
         </Routes>
     )
 };
