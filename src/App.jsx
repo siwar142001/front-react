@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Transfer from "./pages/Transfer.jsx";
+import Deposit from "./pages/Deposit.jsx";
 import History from "./pages/History.jsx";
 import Deposit from "./pages/Deposit";
 import Beneficiaries from "./pages/Beneficiaries.jsx";

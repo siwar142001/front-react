@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import apiClient from "../../api/apiClient";
 import DeleteButton from "../utils/DeleteButton";
 import Notification from "../utils/Notification"
@@ -198,11 +199,12 @@ export default function BankAccounts({ refreshKey = 0 }) {
                   <span className="font-medium">Créé le :</span> {formattedDate}
                 </p>
 
-                <button
-                  className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                <Link
+                  to={`/transactions/history/${account.id}`}
+                  className="mt-6 block w-full bg-blue-600 text-center text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Voir le compte
-                </button>
+                </Link>
               </div>
             );
           })}
