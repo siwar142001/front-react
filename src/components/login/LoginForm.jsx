@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import Notification from "../utils/Notification";
+import { useNavigate } from "react-router-dom";
+
 
 export default function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
     const [failedLogIn, setFailedLogIn] = useState(false);
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -18,7 +21,7 @@ export default function LoginForm() {
             },
         
         );
-    
+        
         // extract token
         const token = response.data.access_token;
 
@@ -26,7 +29,6 @@ export default function LoginForm() {
         localStorage.setItem("jwtToken", token);
 
         setLoggedIn(true);
-        window.location.href = '/';
 
         } catch (error) {
             setFailedLogIn(true);
