@@ -5,7 +5,6 @@ import Register from "./pages/Register.jsx";
 import Transfer from "./pages/Transfer.jsx";
 import Deposit from "./pages/Deposit.jsx";
 import History from "./pages/History.jsx";
-
 import Beneficiaries from "./pages/Beneficiaries.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 
@@ -19,6 +18,8 @@ export default function App(){
             <Route path="/transfer" element={<ProtectedRoute><Transfer/></ProtectedRoute>}/>
             <Route path="/depot" element={<ProtectedRoute><Deposit /></ProtectedRoute>} /> 
             <Route path="/beneficiaries" element={<ProtectedRoute><Beneficiaries /></ProtectedRoute>} /> 
+            <Route path="/transactions/history/:accountId" element={<History />} />
+
         </Routes>
     )
 };
