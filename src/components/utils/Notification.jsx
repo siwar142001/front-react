@@ -26,11 +26,6 @@ export default function Notification({ text, active, setActive }) {
                       transition-transform duration-300 ease-in-out
                     ${show ? "translate-y-0 opacity-100" : "-translate-y-40 opacity-0"}`}>
         <p>{text}</p>
-        <button
-          onClick={() => setActive(false)}
-        >
-          <IoMdCloseCircleOutline className="size-7.5 ml-4 text-red-500"/>
-        </button>
       </div>
     </>);
 }

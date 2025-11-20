@@ -4,6 +4,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Transfer from "./pages/Transfer.jsx";
 import History from "./pages/History.jsx";
+import Beneficiaries from "./pages/Beneficiaries.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 
 export default function App(){
