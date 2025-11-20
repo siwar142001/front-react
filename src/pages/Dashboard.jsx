@@ -1,6 +1,7 @@
 import BankAccounts from "../components/bank-account/BankAccounts";
 import DeleteButton from "../components/utils/DeleteButton"
 import Notification from "../components/utils/Notification";
+import Footer from "../components/utils/Footer";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -32,6 +33,7 @@ export default function Dashboard() {
 
       {/* Liste des comptes */}
       <BankAccounts />
+      <Footer/>
     </div>
   );
 }

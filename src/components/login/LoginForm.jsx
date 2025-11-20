@@ -1,37 +1,50 @@
 import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import Notification from "../utils/Notification";
+import { useNavigate } from "react-router-dom";
+
 
 export default function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
     const [failedLogIn, setFailedLogIn] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
+        if (token) {
+            navigate("/");
+        }
+    }, [navigate]); // redirect to dashboard if logged in 
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         try {
             const response = await apiClient.post("/login", {
-                email,
-                password,
-            },
-        
-        );
-    
-        // extract token
-        const token = response.data.access_token;
+            email,
+            password,
+            });
 
-        // store token
-        localStorage.setItem("jwtToken", token);
+            const token = response.data.access_token;
+            localStorage.setItem("jwtToken", token);
 
-        setLoggedIn(true);
-        window.location.href = '/';
-
+            setLoggedIn(true); // 👈 triggers redirect effect
         } catch (error) {
             setFailedLogIn(true);
         }
+    };
+
+    useEffect(() => {
+    if (loggedIn) {
+        const timer = setTimeout(() => {
+        navigate("/");
+        }, 2000);
+
+        return () => clearTimeout(timer);
     }
+    }, [loggedIn]);
 
     return (
         <>
