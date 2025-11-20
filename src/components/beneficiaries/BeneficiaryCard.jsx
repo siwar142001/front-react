@@ -1,6 +1,6 @@
 import BeneficiaryDeleteButton from "./BeneficiaryDeleteButton";
 
-export default function BeneficiaryCard({deletedId, beneficiary, handleBeneficiaryDeleted}){
+export default function BeneficiaryCard({beneficiary, handleBeneficiaryDeleted}){
     return(
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
                 <div

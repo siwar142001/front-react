@@ -11,7 +11,6 @@ export default function BeneficiariesList(){
     const [beneficiaries, setBeneficiaries] = useState([]);
     const [beneficiaryDeleted, setBeneficiaryDeleted] = useState(false);
     const [beneficiaryCreated, setBeneficiaryCreated] = useState(false);
-    const [success, setSuccess] = useState("");
 
     const navigate = useNavigate();
     
@@ -33,7 +32,8 @@ export default function BeneficiariesList(){
 
     const handleBeneficiaryDeleted = (deletedId) => {
         setBeneficiaries((prev) => prev.filter((beneficiary) => beneficiary.id !== deletedId));
-        setTimeout(() => navigate(-1), 2000);
+        setSuccess("Bénéficiaire supprimé avec succès.");
+        setTimeout(() => setSuccess(""), 2000);
         setBeneficiaryDeleted(true);
     };
 
@@ -41,7 +41,6 @@ export default function BeneficiariesList(){
         // On ajoute le nouveau compte en haut de la liste
         setBeneficiaries((prev) => [newBeneficiary, ...prev]);
         setBeneficiaryCreated(true)
-        setTimeout(() => navigate(-1), 2000);
     };
 
     return(
@@ -50,9 +49,6 @@ export default function BeneficiariesList(){
                 <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-semibold">Mes bénéficiaires</h2>
                     <div className="flex items-center gap-4">
-                        {success && (
-                        <span className="text-sm text-green-600">{success}</span>
-                        )}
                         <button
                         type="button"
                         onClick={() => setIsCreateOpen(true)}
@@ -69,7 +65,7 @@ export default function BeneficiariesList(){
                     <br />
                     Cliquez sur <span className="font-medium">« Ajouter un bénéficiaire »</span> pour en ajouter un.
                 </div>
-                ) : beneficiaries.map((beneficiary) => (<BeneficiaryCard key={beneficiary.to_account_id} beneficiary={beneficiary} handleBeneficiaryDeleted={handleBeneficiaryDeleted}/>))}
+                ) : beneficiaries.map((beneficiary) => (<BeneficiaryCard key={beneficiary.id} beneficiary={beneficiary} handleBeneficiaryDeleted={handleBeneficiaryDeleted}/>))}
         
                 {/* Modal de création de compte */}
                 {<CreateBeneficiaryModal
@@ -79,7 +75,8 @@ export default function BeneficiariesList(){
                 />}
             </section>
 
-            {beneficiaryDeleted ?  <Notification active={beneficiaryDeleted} setActive={setBeneficiaryDeleted} text={"Beneficiary deleted successfully."}/> : beneficiaryCreated ? <Notification active={beneficiaryCreated} setActive={setBeneficiaryCreated} text={"Beneficiary created successfully."}/> : null }
+            {beneficiaryDeleted ?  <Notification active={beneficiaryDeleted} setActive={setBeneficiaryDeleted} text={"Beneficiary deleted successfully."}/> 
+            : beneficiaryCreated ? <Notification active={beneficiaryCreated} setActive={setBeneficiaryCreated} text={"Beneficiary created successfully."}/> : null }
         </div>
     )
 }
