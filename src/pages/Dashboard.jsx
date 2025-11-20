@@ -20,6 +20,7 @@ export default function Dashboard() {
 
       {/* Liste des comptes */}
       <BankAccounts />
+      <Footer/>
     </div>
   );
 }
