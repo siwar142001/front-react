@@ -15,6 +15,7 @@ export default function App(){
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/transfer" element={<ProtectedRoute><Transfer/></ProtectedRoute>}/>
+            <Route path="/beneficiaries" element={<ProtectedRoute><Beneficiaries/></ProtectedRoute>}/>
         </Routes>
     )
 };
