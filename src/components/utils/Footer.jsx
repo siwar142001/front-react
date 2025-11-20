@@ -13,7 +13,7 @@ export default function Footer(){
     return(
         <div class="fixed bottom-0 left-0 z-50 w-full h-16 bg-slate-500 border-t border-default">
             <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-                <button type="button" class="cursor-pointer inline-flex flex-col items-center justify-center px-5 hover:bg-slate-600">
+                <button type="button" onClick={() => navigate("/")} class="cursor-pointer inline-flex flex-col items-center justify-center px-5 hover:bg-slate-600">
                     <svg class="w-7 h-7 mb-1 text-body group-hover:text-fg-brand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/></svg>
                     <span class="text-sm text-body">Home</span>
                 </button>
