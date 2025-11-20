@@ -11,29 +11,37 @@ export default function LoginForm() {
     const [failedLogIn, setFailedLogIn] = useState(false);
     const navigate = useNavigate();
 
+    if(localStorage.getItem("jwtToken")){
+        navigate("/")
+    }
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
         try {
             const response = await apiClient.post("/login", {
-                email,
-                password,
-            },
-        
-        );
-        
-        // extract token
-        const token = response.data.access_token;
+            email,
+            password,
+            });
 
-        // store token
-        localStorage.setItem("jwtToken", token);
+            const token = response.data.access_token;
+            localStorage.setItem("jwtToken", token);
 
-        setLoggedIn(true);
-
+            setLoggedIn(true); // 👈 triggers redirect effect
         } catch (error) {
             setFailedLogIn(true);
         }
+    };
+
+    useEffect(() => {
+    if (loggedIn) {
+        const timer = setTimeout(() => {
+        navigate("/");
+        }, 2000);
+
+        return () => clearTimeout(timer);
     }
+    }, [loggedIn]);
 
     return (
         <>
