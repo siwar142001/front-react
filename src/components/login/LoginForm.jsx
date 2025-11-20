@@ -11,9 +11,12 @@ export default function LoginForm() {
     const [failedLogIn, setFailedLogIn] = useState(false);
     const navigate = useNavigate();
 
-    if(localStorage.getItem("jwtToken")){
-        navigate("/")
-    }
+    useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
+        if (token) {
+            navigate("/");
+        }
+    }, [navigate]); // redirect to dashboard if logged in 
 
     const handleLogin = async (e) => {
         e.preventDefault();
