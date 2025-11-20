@@ -20,7 +20,7 @@ export default function Notification({ text, active, setActive }) {
     <>
 
       {/* Notification box */}
-      <div className={`fixed top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+      <div onClick={() => setActive(false)} className={`fixed top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                       bg-white text-gray-800 p-6 rounded-xl shadow-xl z-50
                       animate-fade-in flex flex-row vertical-center text-2xl
                       transition-transform duration-300 ease-in-out

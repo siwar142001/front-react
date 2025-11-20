@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import apiClient from "../../api/apiClient";
 import DeleteButton from "../utils/DeleteButton";
+import Notification from "../utils/Notification"
 
 function CreateAccountModal({ isOpen, onClose, onCreated }) {
   const [accountType, setAccountType] = useState("current");
@@ -91,6 +93,7 @@ function CreateAccountModal({ isOpen, onClose, onCreated }) {
 }
 
 export default function BankAccounts({ refreshKey = 0 }) {
+  const [accountDeleted, setAccountDeleted] = useState(false);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -120,13 +123,7 @@ export default function BankAccounts({ refreshKey = 0 }) {
     setBankAccounts((prev) => prev.filter((acc) => acc.id !== deletedId));
     setSuccess("Compte clôturé avec succès.");
     setTimeout(() => setSuccess(""), 3000);
-
-
-     {/* la je veux bien ajouter la Notification box de ludwig */}
-
-
-
-
+    setAccountDeleted(true);
   };
 
  
@@ -202,16 +199,19 @@ export default function BankAccounts({ refreshKey = 0 }) {
                   <span className="font-medium">Créé le :</span> {formattedDate}
                 </p>
 
-                <button
-                  className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                <Link
+                  to={`/transactions/history/${account.id}`}
+                  className="mt-6 block w-full bg-blue-600 text-center text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Voir le compte
-                </button>
+                </Link>
               </div>
             );
           })}
         </div>
       )}
+
+      {accountDeleted ? <Notification active={accountDeleted} setActive={setAccountDeleted} text={"Compte supprimé."} /> : <></>}
 
       {/* Modal de création de compte */}
       <CreateAccountModal

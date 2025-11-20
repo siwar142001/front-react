@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../api/apiClient";
-import Notification from "../utils/Notification";
-import BeneficiariesScroller from "../beneficiaries/BeneficiariesScroller";
 
-export default function TransferForm() {
+export default function DepositForm() {
   const [accounts, setAccounts] = useState([]);
   const [isLoadingAccounts, setIsLoadingAccounts] = useState(true);
   const [accountsError, setAccountsError] = useState("");
 
-  const [beneficiaryId, setBeneficiaryId] = useState("");
-
-  const [sourceId, setSourceId] = useState("");
+  const [accountId, setAccountId] = useState("");
   const [amount, setAmount] = useState("");
 
   const [formError, setFormError] = useState("");
@@ -21,7 +17,7 @@ export default function TransferForm() {
 
   const navigate = useNavigate();
 
-  // Charger les comptes pour la liste déroulante
+  // Charger les comptes de l'utilisateur
   useEffect(() => {
     const loadAccounts = async () => {
       setIsLoadingAccounts(true);
@@ -46,7 +42,7 @@ export default function TransferForm() {
     setApiError("");
     setSuccess("");
 
-    if (!sourceId || !beneficiaryId || !amount) {
+    if (!accountId || !amount) {
       setFormError("Veuillez remplir tous les champs.");
       return;
     }
@@ -57,34 +53,34 @@ export default function TransferForm() {
       return;
     }
 
-    if (sourceId === beneficiaryId) {
-      setFormError("Le compte source et le compte destinataire doivent être différents.");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
-      await apiClient.post("/transactions/transfer", {
-        from_account_id: Number(sourceId),
-        to_account_id: Number(beneficiaryId),
+      await apiClient.post("/transactions/deposit", {
+        from_account_id: Number(accountId),
         amount: numericAmount,
+        description: "Dépôt via interface",
       });
 
-      setSuccess("Virement effectué avec succès.");
+      setSuccess("Dépôt effectué avec succès.");
 
-      // petite pause optionnelle pour laisser voir le message
+      // petite pause puis retour au dashboard
       setTimeout(() => {
-        navigate("/"); // retour au dashboard
-      }, 1000);
+        navigate("/");
+      }, 800);
     } catch (err) {
       console.error(err);
       const detail = err.response?.data?.detail;
-      setApiError(
-        typeof detail === "string"
-          ? detail
-          : "Une erreur est survenue lors du virement."
-      );
+
+      let message = "Une erreur est survenue lors du dépôt.";
+      if (typeof detail === "string") {
+        message = detail;
+      } else if (Array.isArray(detail) && detail[0]?.msg) {
+        // gestion des erreurs de validation Pydantic
+        message = detail[0].msg;
+      }
+
+      setApiError(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -92,7 +88,7 @@ export default function TransferForm() {
 
   return (
     <div className="max-w-xl bg-white shadow-md rounded-xl border border-gray-200 p-6">
-      <h2 className="text-xl font-semibold mb-4">Effectuer un virement</h2>
+      <h2 className="text-xl font-semibold mb-4">Effectuer un dépôt</h2>
 
       {accountsError && (
         <p className="text-sm text-red-500 mb-3">{accountsError}</p>
@@ -111,16 +107,16 @@ export default function TransferForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Compte source */}
+        {/* Compte à créditer */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Compte source
+            Compte à créditer
           </label>
           <select
-            value={sourceId}
-            onChange={(e) => setSourceId(e.target.value)}
+            value={accountId}
+            onChange={(e) => setAccountId(e.target.value)}
             disabled={isLoadingAccounts || !accounts.length}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
           >
             <option value="">Sélectionnez un compte</option>
             {accounts.map((acc) => (
@@ -133,8 +129,6 @@ export default function TransferForm() {
           </select>
         </div>
 
-        {<BeneficiariesScroller beneficiaryId={beneficiaryId} setBeneficiaryId={setBeneficiaryId}/>}
-
         {/* Montant */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -146,8 +140,8 @@ export default function TransferForm() {
             min="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="Ex : 50.00"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Ex : 100.00"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
 
@@ -155,16 +149,12 @@ export default function TransferForm() {
           <button
             type="submit"
             disabled={isSubmitting || isLoadingAccounts || !accounts.length}
-            className="w-full rounded-lg bg-blue-600 text-white py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-60 transition-colors"
+            className="w-full rounded-lg bg-green-600 text-white py-2 text-sm font-medium hover:bg-green-700 disabled:opacity-60 transition-colors"
           >
-            {isSubmitting ? "Virement en cours..." : "Envoyer l'argent"}
+            {isSubmitting ? "Dépôt en cours..." : "Déposer l'argent"}
           </button>
         </div>
       </form>
-
-      <button className=" mt-10 w-full rounded-lg bg-blue-600 text-white py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-60 transition-colors" onClick={() => navigate("/beneficiaries")}>Gérer les bénéficiaires</button>
-
-      {success ? <Notification active={success} setActive={setSuccess} text="Transaction réussie"/> : null}
     </div>
   );
 }
