@@ -6,7 +6,6 @@ import Transfer from "./pages/Transfer.jsx";
 import Deposit from "./pages/Deposit.jsx";
 import History from "./pages/History.jsx";
 import Beneficiaries from "./pages/Beneficiaries.jsx";
-import Beneficiaries from "./pages/Beneficiaries.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 
 export default function App(){

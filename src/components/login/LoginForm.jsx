@@ -30,7 +30,7 @@ export default function LoginForm() {
             const token = response.data.access_token;
             localStorage.setItem("jwtToken", token);
 
-            setLoggedIn(true); // 👈 triggers redirect effect
+            setLoggedIn(true); // triggers redirect effect
         } catch (error) {
             setFailedLogIn(true);
         }
