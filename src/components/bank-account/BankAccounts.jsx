@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import DeleteButton from "../utils/DeleteButton";
+import Notification from "../utils/Notification"
 
 function CreateAccountModal({ isOpen, onClose, onCreated }) {
   const [accountType, setAccountType] = useState("current");
   const [isLoading, setIsLoading] = useState(false);
-  const [accountDeleted, setAccountDeleted] = useState(false);
   const [error, setError] = useState("");
 
   if (!isOpen) return null;
@@ -92,6 +92,7 @@ function CreateAccountModal({ isOpen, onClose, onCreated }) {
 }
 
 export default function BankAccounts({ refreshKey = 0 }) {
+  const [accountDeleted, setAccountDeleted] = useState(false);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -207,6 +208,8 @@ export default function BankAccounts({ refreshKey = 0 }) {
           })}
         </div>
       )}
+
+      {accountDeleted ? <Notification active={accountDeleted} setActive={setAccountDeleted} text={"Compte supprimé."} /> : <></>}
 
       {/* Modal de création de compte */}
       <CreateAccountModal
