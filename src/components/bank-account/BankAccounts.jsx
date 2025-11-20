@@ -5,6 +5,7 @@ import DeleteButton from "../utils/DeleteButton";
 function CreateAccountModal({ isOpen, onClose, onCreated }) {
   const [accountType, setAccountType] = useState("current");
   const [isLoading, setIsLoading] = useState(false);
+  const [accountDeleted, setAccountDeleted] = useState(false);
   const [error, setError] = useState("");
 
   if (!isOpen) return null;
@@ -120,13 +121,7 @@ export default function BankAccounts({ refreshKey = 0 }) {
     setBankAccounts((prev) => prev.filter((acc) => acc.id !== deletedId));
     setSuccess("Compte clôturé avec succès.");
     setTimeout(() => setSuccess(""), 3000);
-
-
-     {/* la je veux bien ajouter la Notification box de ludwig */}
-
-
-
-
+    setAccountDeleted(true);
   };
 
  

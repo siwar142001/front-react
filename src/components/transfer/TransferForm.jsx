@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../api/apiClient";
+import Notification from "../utils/Notification";
+import BeneficiariesScroller from "../beneficiaries/BeneficiariesScroller";
 
 export default function TransferForm() {
   const [accounts, setAccounts] = useState([]);
   const [isLoadingAccounts, setIsLoadingAccounts] = useState(true);
   const [accountsError, setAccountsError] = useState("");
 
+  const [beneficiaryId, setBeneficiaryId] = useState("");
+
   const [sourceId, setSourceId] = useState("");
-  const [destinationId, setDestinationId] = useState("");
   const [amount, setAmount] = useState("");
 
   const [formError, setFormError] = useState("");
@@ -43,7 +46,7 @@ export default function TransferForm() {
     setApiError("");
     setSuccess("");
 
-    if (!sourceId || !destinationId || !amount) {
+    if (!sourceId || !beneficiaryId || !amount) {
       setFormError("Veuillez remplir tous les champs.");
       return;
     }
@@ -54,7 +57,7 @@ export default function TransferForm() {
       return;
     }
 
-    if (sourceId === destinationId) {
+    if (sourceId === beneficiaryId) {
       setFormError("Le compte source et le compte destinataire doivent être différents.");
       return;
     }
@@ -64,7 +67,7 @@ export default function TransferForm() {
     try {
       await apiClient.post("/transactions/transfer", {
         from_account_id: Number(sourceId),
-        to_account_id: Number(destinationId),
+        to_account_id: Number(beneficiaryId),
         amount: numericAmount,
       });
 
@@ -73,7 +76,7 @@ export default function TransferForm() {
       // petite pause optionnelle pour laisser voir le message
       setTimeout(() => {
         navigate("/"); // retour au dashboard
-      }, 800);
+      }, 1000);
     } catch (err) {
       console.error(err);
       const detail = err.response?.data?.detail;
@@ -130,29 +133,7 @@ export default function TransferForm() {
           </select>
         </div>
 
-        {/* Compte destinataire */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Compte destinataire (numéro)
-          </label>
-          <input
-            type="number"
-            min="1"
-            value={destinationId}
-            onChange={(e) => setDestinationId(e.target.value)}
-            placeholder="Numéro de compte du destinataire"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <p className="text-xs text-gray-500 mt-1">
-
-
-
-            Plus tard, on va remplacer ça par une liste de bénéficiaires.
-
-
-
-          </p>
-        </div>
+        {<BeneficiariesScroller beneficiaryId={beneficiaryId} setBeneficiaryId={setBeneficiaryId}/>}
 
         {/* Montant */}
         <div>
@@ -180,6 +161,31 @@ export default function TransferForm() {
           </button>
         </div>
       </form>
+
+      <button onClick={() => navigate("/beneficiaries")}>Gérer les bénéficiaires</button>
+
+      {success ? <Notification active={success} setActive={setSuccess} text="Transaction réussie"/> : null}
     </div>
   );
 }
+
+
+{/* Compte destinataire
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Compte destinataire (numéro)
+  </label>
+  <input
+    type="number"
+    min="1"
+    value={destinationId}
+    onChange={(e) => setDestinationId(e.target.value)}
+    placeholder="Numéro de compte du destinataire"
+    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+  <p className="text-xs text-gray-500 mt-1">Plus tard, on va remplacer ça par une liste de bénéficiaires.</p>
+
+</div>
+
+ */}
+        

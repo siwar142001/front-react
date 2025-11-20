@@ -4,6 +4,11 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Transfer from "./pages/Transfer.jsx";
 import History from "./pages/History.jsx";
+<<<<<<< Updated upstream
+=======
+import Deposit from "./pages/Deposit";
+import Beneficiaries from "./pages/Beneficiaries.jsx";
+>>>>>>> Stashed changes
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 
 export default function App(){
@@ -14,6 +19,11 @@ export default function App(){
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/transfer" element={<ProtectedRoute><Transfer/></ProtectedRoute>}/>
+<<<<<<< Updated upstream
+=======
+            <Route path="/depot" element={<ProtectedRoute><Deposit /></ProtectedRoute>} /> 
+            <Route path="/beneficiaries" element={<ProtectedRoute><Beneficiaries /></ProtectedRoute>} /> 
+>>>>>>> Stashed changes
         </Routes>
     )
 };
