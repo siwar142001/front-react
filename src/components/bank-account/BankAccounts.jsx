@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import DeleteButton from "../utils/DeleteButton";
+import DownloadButton from "../utils/DownloadButton";
 
 function CreateAccountModal({ isOpen, onClose, onCreated }) {
   const [accountType, setAccountType] = useState("current");
@@ -181,6 +182,10 @@ export default function BankAccounts({ refreshKey = 0 }) {
                     accountId={account.id}
                     onDeleted={handleAccountDeleted}
                   />
+                </div>
+
+                <div className="absolute top-4 right-12">
+                  <DownloadButton accountId={account.id} />
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
