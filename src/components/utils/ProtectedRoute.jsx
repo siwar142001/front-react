@@ -5,7 +5,10 @@ export default function ProtectedRoute({ children }) {
     const access_token = localStorage.getItem("jwtToken");
 
     if (!access_token) {
+        localStorage.setItem("jwtToken");
         return <Navigate to="/login" replace />;
+        
     }
+
     return children;
 }

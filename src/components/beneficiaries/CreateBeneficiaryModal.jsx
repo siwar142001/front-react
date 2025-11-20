@@ -29,7 +29,6 @@ export default function CreateBeneficiaryModal({ isOpen, onClose, onCreated }){
         }
 
         // reset + fermer
-        setAccountType("current");
         onClose();
         } catch (err) {
         console.error(err);
@@ -55,16 +54,6 @@ export default function CreateBeneficiaryModal({ isOpen, onClose, onCreated }){
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <p>Nom du bénéficiaire
-                    <input name="to_account_id" 
-                    type="text" 
-                    value={toAccountId} 
-                    placeholder="Numéro du compte bénéficiaire..." 
-                    onChange={(e) => setToAccountId(e.target.value)}
-                    className="border-2 border-blue-500 rounded p-1 w-100"/>
-                </p>
-
-
-                <p>Numéro du compte bénéficiaire
                     <input name="name" 
                     type="text" 
                     value={name} 
@@ -74,8 +63,18 @@ export default function CreateBeneficiaryModal({ isOpen, onClose, onCreated }){
                 </p>
 
 
-                <p>Description
+                <p>Numéro du compte bénéficiaire
                     <input name="to_account_id" 
+                    type="text" 
+                    value={toAccountId} 
+                    placeholder="Numéro du compte bénéficiaire..." 
+                    onChange={(e) => setToAccountId(e.target.value)}
+                    className="border-2 border-blue-500 rounded p-1 w-100"/>
+                </p>
+
+
+                <p>Description
+                    <input name="description" 
                     type="text" 
                     value={description} 
                     placeholder="Description..." 
