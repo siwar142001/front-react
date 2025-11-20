@@ -162,30 +162,9 @@ export default function TransferForm() {
         </div>
       </form>
 
-      <button onClick={() => navigate("/beneficiaries")}>Gérer les bénéficiaires</button>
+      <button className=" mt-10 w-full rounded-lg bg-blue-600 text-white py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-60 transition-colors" onClick={() => navigate("/beneficiaries")}>Gérer les bénéficiaires</button>
 
       {success ? <Notification active={success} setActive={setSuccess} text="Transaction réussie"/> : null}
     </div>
   );
 }
-
-
-{/* Compte destinataire
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    Compte destinataire (numéro)
-  </label>
-  <input
-    type="number"
-    min="1"
-    value={destinationId}
-    onChange={(e) => setDestinationId(e.target.value)}
-    placeholder="Numéro de compte du destinataire"
-    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-  />
-  <p className="text-xs text-gray-500 mt-1">Plus tard, on va remplacer ça par une liste de bénéficiaires.</p>
-
-</div>
-
- */}
-        

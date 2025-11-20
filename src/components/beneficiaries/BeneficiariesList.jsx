@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import BeneficiaryCard from "./BeneficiaryCard";
+import CreateBeneficiaryModal from "./CreateBeneficiaryModal";
 
 export default function BeneficiariesList(){
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isLoadingBeneficiaries, setIsLoadingBeneficiaries] = useState(true);
     const [beneficiaries, setBeneficiaries] = useState([]);
     const [beneficiaryDeleted, setBeneficiaryDeleted] = useState([]);
@@ -66,11 +68,11 @@ export default function BeneficiariesList(){
                 ) : beneficiaries.map((beneficiary) => (<BeneficiaryCard key={beneficiary.to_account_id} beneficiary={beneficiary} handleBeneficiaryDeleted={handleBeneficiaryDeleted}/>))}
         
                 {/* Modal de création de compte */}
-                {/*<CreateBeneficiaryModal
+                {<CreateBeneficiaryModal
                 isOpen={isCreateOpen}
                 onClose={() => setIsCreateOpen(false)}
                 onCreated={handleBeneficiaryCreated}
-                />*/}
+                />}
             </section>
         </div>
     )
