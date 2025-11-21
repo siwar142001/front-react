@@ -91,7 +91,7 @@ export default function TransferForm() {
   };
 
   return (
-    <div className="max-w-xl bg-white shadow-md rounded-xl border border-gray-200 p-6">
+    <div className="w-150 bg-white shadow-md rounded-xl border border-gray-200 p-6">
       <h2 className="text-xl font-semibold mb-4">Effectuer un virement</h2>
 
       {accountsError && (

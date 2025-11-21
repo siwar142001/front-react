@@ -2,9 +2,9 @@ import BeneficiaryDeleteButton from "./BeneficiaryDeleteButton";
 
 export default function BeneficiaryCard({beneficiary, handleBeneficiaryDeleted}){
     return(
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5">
+        <div className="gap-6 mt-5">
                 <div
-                className="relative bg-white shadow-md rounded-xl p-6 border border-gray-200 hover:shadow-xl transition-shadow"
+                className="w-150 relative bg-white shadow-md rounded-xl p-6 border border-gray-200 hover:shadow-xl transition-shadow"
                 >
                 {/* Delete en haut à droite */}
                 <div className="absolute top-4 right-4">

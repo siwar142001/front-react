@@ -3,7 +3,6 @@ import apiClient from "../../api/apiClient";
 import BeneficiaryCard from "./BeneficiaryCard";
 import CreateBeneficiaryModal from "./CreateBeneficiaryModal";
 import Notification from "../utils/Notification";
-import { useNavigate } from "react-router-dom";
 
 export default function BeneficiariesList(){
     const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -12,8 +11,6 @@ export default function BeneficiariesList(){
     const [beneficiaryDeleted, setBeneficiaryDeleted] = useState(false);
     const [beneficiaryCreated, setBeneficiaryCreated] = useState(false);
 
-    const navigate = useNavigate();
-    
     useEffect(() => {
     const loadBeneficiaries = async () => {
       setIsLoadingBeneficiaries(true);
@@ -32,22 +29,20 @@ export default function BeneficiariesList(){
 
     const handleBeneficiaryDeleted = (deletedId) => {
         setBeneficiaries((prev) => prev.filter((beneficiary) => beneficiary.id !== deletedId));
-        setSuccess("Bénéficiaire supprimé avec succès.");
-        setTimeout(() => setSuccess(""), 2000);
         setBeneficiaryDeleted(true);
     };
 
     const handleBeneficiaryCreated = (newBeneficiary) => {
-        // On ajoute le nouveau compte en haut de la liste
-        setBeneficiaries((prev) => [newBeneficiary, ...prev]);
+        // On ajoute le nouveau compte en bas de la liste
+        setBeneficiaries((prev) => [...prev, newBeneficiary]);
         setBeneficiaryCreated(true)
     };
 
     return(
-        <div>
-            <section className="px-6 py-6">
-                <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold">Mes bénéficiaires</h2>
+        <div className=" bg-slate-200 h-screen w-screen flex justify-center">
+            <section className="px-6 py-6 flex flex-col items-center">
+                <div className="flex items-center justify-between mb-6 w-150">
+                    <h2 className="text-2xl font-semibold">Mes bénéficiaires</h2>
                     <div className="flex items-center gap-4">
                         <button
                         type="button"
@@ -58,7 +53,6 @@ export default function BeneficiariesList(){
                         </button>
                     </div>
                 </div>
-
                 {beneficiaries.length === 0 ? (
                 <div className="text-center mt-10 text-gray-600">
                     Vous n’avez encore aucun bénéficiaires.  
@@ -67,6 +61,7 @@ export default function BeneficiariesList(){
                 </div>
                 ) : beneficiaries.map((beneficiary) => (<BeneficiaryCard key={beneficiary.id} beneficiary={beneficiary} handleBeneficiaryDeleted={handleBeneficiaryDeleted}/>))}
         
+
                 {/* Modal de création de compte */}
                 {<CreateBeneficiaryModal
                 isOpen={isCreateOpen}

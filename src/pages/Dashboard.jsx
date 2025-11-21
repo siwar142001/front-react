@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   return (
-    <div className="px-6 py-6">
+    <div className="px-6 py-6 h-full bg-slate-200">
         {/* Barre d’action en haut */}
         <div className="flex justify-end mb-4">
             <Link

@@ -122,17 +122,14 @@ export default function BankAccounts({ refreshKey = 0 }) {
   const handleAccountDeleted = (deletedId) => {
     setBankAccounts((prev) => prev.filter((acc) => acc.id !== deletedId));
     setSuccess("Compte clôturé avec succès.");
-    setTimeout(() => setSuccess(""), 3000);
-    setAccountDeleted(true);
   };
 
  
 
   const handleAccountCreated = (newAccount) => {
     // On ajoute le nouveau compte en haut de la liste
-    setBankAccounts((prev) => [newAccount, ...prev]);
+    setBankAccounts((prev) => [...prev, newAccount]);
     setSuccess("Compte créé avec succès.");
-    setTimeout(() => setSuccess(""), 3000);
   };
 
   if (isLoading) return <p className="text-center mt-10">Chargement...</p>;
@@ -214,7 +211,7 @@ export default function BankAccounts({ refreshKey = 0 }) {
           </div>
         )}
 
-        {accountDeleted ? <Notification active={accountDeleted} setActive={setAccountDeleted} text={"Compte supprimé."} /> : <></>}
+        {success ? <Notification active={success} setActive={setSuccess} text={success} /> : <></>}
 
         {/* Modal de création de compte */}
         <CreateAccountModal
