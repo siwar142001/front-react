@@ -78,7 +78,7 @@ export default function HistoryList() {
     return d.toLocaleString("fr-FR");
   };
 
-  // 🔽 Téléchargement du relevé PDF
+  // Téléchargement du relevé PDF
   const handleDownloadStatement = async () => {
     setDownloadError("");
     setIsDownloading(true);
@@ -184,8 +184,9 @@ export default function HistoryList() {
         <div className="space-y-4">
           {transactions.map((tx, index) => {
             const isDebit = tx.type === "virement";
-            const sign = isDebit ? "-" : "+";
-            const amountClass = isDebit ? "text-red-600" : "text-green-600";
+            const sign = isDebit ? accountId === tx.to_account_id.toFixed() ? "+" : "-" : "+";
+            
+            const amountClass = isDebit ? accountId === tx.to_account_id.toFixed() ? "text-green-600" : "text-red-600" : "text-green-600";
             const formattedDate = tx.date
               ? new Date(tx.date.replace(" ", "T")).toLocaleString("fr-FR")
               : "";

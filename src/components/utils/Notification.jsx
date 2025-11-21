@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function Notification({ text, active, setActive }) {
     useEffect(() => {const timer = setTimeout(() => {
-        setActive(false);
+      setActive(false);
     }, 2000);
 
     return () => clearTimeout(timer) }, []);
