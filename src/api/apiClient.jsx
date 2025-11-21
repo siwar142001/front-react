@@ -15,4 +15,16 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Handle errors (auto logout)
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response && err.response.status === 401) {
+      localStorage.removeItem("jwtToken");
+      window.location.href = "/login";
+    }
+    return Promise.reject(err);
+  }
+);
+
 export default apiClient;

@@ -31,20 +31,13 @@ export default function LoginForm() {
             localStorage.setItem("jwtToken", token);
 
             setLoggedIn(true); // 👈 triggers redirect effect
+            setTimeout(() => {
+            navigate("/");
+            }, 2000);
         } catch (error) {
             setFailedLogIn(true);
         }
     };
-
-    useEffect(() => {
-    if (loggedIn) {
-        const timer = setTimeout(() => {
-        navigate("/");
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }
-    }, [loggedIn]);
 
     return (
         <>
@@ -73,8 +66,8 @@ export default function LoginForm() {
             <a className="underline" href="/register">No account ? Create one here</a>
         </form>
 
-        {loggedIn ? <Notification text="Connection successful" active={loggedIn} setActive={setLoggedIn}/> 
-        : failedLogIn ? <Notification text="Connection Failed" active={failedLogIn} setActive={setFailedLogIn}/> : <></>}
+        {loggedIn ? <Notification text={"Connection successful"} active={loggedIn} setActive={setLoggedIn}/> 
+        : failedLogIn ? <Notification text={"Connection Failed"} active={failedLogIn} setActive={setFailedLogIn} /> : <></>}
         
         </>
     );
