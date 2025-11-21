@@ -9,7 +9,7 @@ export default function Dashboard() {
         <div className="flex justify-end mb-4">
             <Link
             to="/depot"
-            className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition-colors"
+            className="fixed bottom-10 right-10 w-fit h-fit px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition-colors"
             >
             Effectuer un dépôt
             </Link>

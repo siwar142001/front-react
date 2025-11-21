@@ -139,86 +139,90 @@ export default function BankAccounts({ refreshKey = 0 }) {
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
 
   return (
-    <section className="px-6 py-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-semibold">Mes comptes</h2>
-        <div className="flex items-center gap-4">
-          {success && (
-            <span className="text-sm text-green-600">{success}</span>
-          )}
-          <button
-            type="button"
-            onClick={() => setIsCreateOpen(true)}
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
-          >
-            + Ouvrir un compte
-          </button>
+    <div className="flex justify-center">
+      <section className="px-6 py-6 flex flex-col w-fit">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold">Mes comptes</h2>
+          <div className="flex items-center">
+            {success && (
+              <span className="text-sm text-green-600">{success}</span>
+            )}
+            <button
+              type="button"
+              onClick={() => setIsCreateOpen(true)}
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              + Ouvrir un compte
+            </button>
+          </div>
         </div>
-      </div>
 
-      {bankAccounts.length === 0 ? (
-        <div className="text-center mt-10 text-gray-600">
-          Vous n’avez encore aucun compte.  
-          <br />
-          Cliquez sur <span className="font-medium">« Ouvrir un compte »</span> pour en créer un.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {bankAccounts.map((account) => {
-            const formattedDate = new Date(account.created_at).toLocaleDateString("fr-FR");
+        {bankAccounts.length === 0 ? (
+          <div className="text-center mt-10 text-gray-600">
+            Vous n’avez encore aucun compte.  
+            <br />
+            Cliquez sur <span className="font-medium">« Ouvrir un compte »</span> pour en créer un.
+          </div>
+        ) : (
+        <div>
+          <div className="flex flex-col w-200 md:grid-cols-2 gap-6">
+            {bankAccounts.map((account) => {
+              const formattedDate = new Date(account.created_at).toLocaleDateString("fr-FR");
 
-            return (
-              <div
-                key={account.id}
-                className="relative bg-white shadow-md rounded-xl p-6 border border-gray-200 hover:shadow-xl transition-shadow"
-              >
-                {/* Delete en haut à droite */}
-                <div className="absolute top-4 right-4">
-                  <DeleteButton
-                    accountId={account.id}
-                    onDeleted={handleAccountDeleted}
-                  />
-                </div>
-
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  Compte n° {account.id}
-                </h3>
-
-                <p className="text-gray-600">
-                  <span className="font-medium">Type :</span> {account.account_type}
-                </p>
-
-                <p className="text-gray-600 mt-1">
-                  <span className="font-medium">Solde :</span>{" "}
-                  <span className="text-green-600 font-semibold">
-                    {account.balance.toFixed(2)} €
-                  </span>
-                </p>
-
-                <p className="text-gray-600 mt-1">
-                  <span className="font-medium">Créé le :</span> {formattedDate}
-                </p>
-
-                <Link
-                  to={`/transactions/history/${account.id}`}
-                  className="mt-6 block w-full bg-blue-600 text-center text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              return (
+                <div
+                  key={account.id}
+                  className="relative bg-white shadow-md rounded-xl p-6 border border-gray-200 hover:shadow-xl transition-shadow"
                 >
-                  Voir le compte
-                </Link>
-              </div>
-            );
-          })}
-        </div>
-      )}
+                  {/* Delete en haut à droite */}
+                  <div className="absolute top-4 right-4">
+                    <DeleteButton
+                      accountId={account.id}
+                      onDeleted={handleAccountDeleted}
+                    />
+                  </div>
 
-      {accountDeleted ? <Notification active={accountDeleted} setActive={setAccountDeleted} text={"Compte supprimé."} /> : <></>}
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">
+                    Compte n° {account.id}
+                  </h3>
 
-      {/* Modal de création de compte */}
-      <CreateAccountModal
-        isOpen={isCreateOpen}
-        onClose={() => setIsCreateOpen(false)}
-        onCreated={handleAccountCreated}
-      />
-    </section>
+                  <p className="text-gray-600">
+                    <span className="font-medium">Type :</span> {account.account_type}
+                  </p>
+
+                  <p className="text-gray-600 mt-1">
+                    <span className="font-medium">Solde :</span>{" "}
+                    <span className="text-green-600 font-semibold">
+                      {account.balance.toFixed(2)} €
+                    </span>
+                  </p>
+
+                  <p className="text-gray-600 mt-1">
+                    <span className="font-medium">Créé le :</span> {formattedDate}
+                  </p>
+
+                  <Link
+                    to={`/transactions/history/${account.id}`}
+                    className="mt-6 block w-full bg-blue-600 text-center text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Voir le compte
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+          </div>
+        )}
+
+        {accountDeleted ? <Notification active={accountDeleted} setActive={setAccountDeleted} text={"Compte supprimé."} /> : <></>}
+
+        {/* Modal de création de compte */}
+        <CreateAccountModal
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
+          onCreated={handleAccountCreated}
+        />
+      </section>
+    </div>
   );
 }
