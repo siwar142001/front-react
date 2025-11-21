@@ -1,92 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import Notification from "../utils/Notification";
 import { useNavigate } from "react-router-dom";
 
+
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [failedLogIn, setFailedLogIn] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [failedLogIn, setFailedLogIn] = useState(false);
+    const navigate = useNavigate();
 
-  const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
+        if (token) {
+          navigate("/");
+        }
+    }, []); // redirect to dashboard if logged in 
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setFailedLogIn(false);
+    const handleLogin = async (e) => {
+        e.preventDefault();
 
-    if (!email || !password) {
-      setFailedLogIn(true);
-      return;
-    }
+        try {
+            const response = await apiClient.post("/login", {
+            email,
+            password,
+            });
 
-    try {
-      const response = await apiClient.post("/login", { email, password });
-      const token = response.data?.access_token;
+            const token = response.data.access_token;
+            localStorage.setItem("jwtToken", token);
 
-      if (!token) {
-        setFailedLogIn(true);
-        return;
-      }
+            setLoggedIn(true); // triggers redirect effect
+            setTimeout(() => {
+            navigate("/");
+            }, 2000);
+        } catch (error) {
+            setFailedLogIn(true);
+        }
+    };
 
-      localStorage.setItem("jwtToken", token);
-      setLoggedIn(true);
-
-      setTimeout(() => {
-        navigate("/"); // only redirect on successful login
-      }, 1000);
-    } catch (error) {
-      console.error(error);
-      setFailedLogIn(true);
-    }
-  };
-
-  return (
-    <>
-      <form
+    return (
+        <>
+        <form
         onSubmit={handleLogin}
         className="flex flex-col items-center w-fit border-2 rounded p-5 bg-slate-900"
-      >
-        <input
-          className="border-2 rounded m-2 p-1 w-60"
-          type="text"
-          placeholder="E-mail..."
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          className="border-2 rounded m-2 p-1 w-60"
-          type="password"
-          placeholder="Password..."
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="border-2 rounded w-30 m-4 px-4 py-1"
         >
-          Login
-        </button>
-        <a className="underline" href="/register">
-          No account? Create one here
-        </a>
-      </form>
+            <input
+                className="border-2 rounded m-2 p-1 w-60"
+                type="email"
+                placeholder="E-mail..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
 
-      {loggedIn && (
-        <Notification
-          text="Connection successful"
-          active={loggedIn}
-          setActive={setLoggedIn}
-        />
-      )}
+            <input
+                className="border-2 rounded m-2 p-1 w-60"
+                type="password"
+                placeholder="Password..."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
 
-      {failedLogIn && (
-        <Notification
-          text="Connection failed"
-          active={failedLogIn}
-          setActive={setFailedLogIn}
-        />
-      )}
-    </>
-  );
+            <button type="submit" className="border-2 rounded w-30 m-4 px-4 py-1">Login</button>
+
+            <a className="underline" href="/register">No account ? Create one here</a>
+        </form>
+
+        {loggedIn ? <Notification text={"Connection successful"} active={loggedIn} setActive={setLoggedIn}/> 
+        : failedLogIn ? <Notification text={"Connection Failed"} active={failedLogIn} setActive={setFailedLogIn} /> : <></>}
+        
+        </>
+    );
 }
