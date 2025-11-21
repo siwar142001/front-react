@@ -11,6 +11,9 @@ export default function History() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
+
   useEffect(() => {
     if (!accountId) {
       setError("Aucun identifiant de compte fourni.");
@@ -75,6 +78,43 @@ export default function History() {
     return d.toLocaleString("fr-FR");
   };
 
+  // 🔽 Téléchargement du relevé PDF
+  const handleDownloadStatement = async () => {
+    setDownloadError("");
+    setIsDownloading(true);
+
+    try {
+      // À ADAPTER si ton endpoint est différent
+      const res = await apiClient.get(
+        `/transactions/history/${accountId}/statement`,
+        {
+          responseType: "blob", // on récupère un binaire (PDF)
+        }
+      );
+
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `releve_compte_${accountId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Erreur téléchargement relevé:", err.response?.data || err);
+      const detail = err?.response?.data?.detail;
+      setDownloadError(
+        typeof detail === "string"
+          ? detail
+          : "Impossible de télécharger le relevé de compte."
+      );
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   if (loading) {
     return <div className="p-6 text-center">Chargement…</div>;
   }
@@ -112,9 +152,24 @@ export default function History() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-semibold mb-4">
-        Historique du compte n° {accountId}
-      </h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-semibold">
+          Historique du compte n° {accountId}
+        </h1>
+        <button
+          onClick={handleDownloadStatement}
+          disabled={isDownloading}
+          className="inline-flex items-center px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium bg-white hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {isDownloading ? "Téléchargement..." : "Télécharger le relevé"}
+        </button>
+      </div>
+
+      {downloadError && (
+        <div className="mb-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded">
+          {downloadError}
+        </div>
+      )}
 
       {account && (
         <div className="bg-white shadow rounded-xl border border-gray-200 p-4 mb-6">
@@ -142,7 +197,7 @@ export default function History() {
       ) : (
         <div className="space-y-4">
           {transactions.map((tx, index) => {
-            const isDebit = tx.type === "virement"; // ici, historique = compte source
+            const isDebit = tx.type === "virement";
             const sign = isDebit ? "-" : "+";
             const amountClass = isDebit ? "text-red-600" : "text-green-600";
             const formattedDate = tx.date
