@@ -39,7 +39,7 @@ export default function BeneficiariesList(){
     };
 
     return(
-        <div className=" bg-slate-200 h-screen w-screen flex justify-center">
+        <div className=" bg-slate-200 min-h-screen h-full w-screen flex justify-center">
             <section className="px-6 py-6 flex flex-col items-center">
                 <div className="flex items-center justify-between mb-6 w-150">
                     <h2 className="text-2xl font-semibold">Mes bénéficiaires</h2>

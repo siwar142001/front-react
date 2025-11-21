@@ -136,7 +136,7 @@ export default function HistoryList() {
   }
 
   return (
-    <div className=" h-screen w-screen bg-slate-200">
+    <div className="min-h-screen h-full w-screen bg-slate-200">
     <div className="px-6 py-6 mx-auto w-fit">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-semibold">
