@@ -1,5 +1,5 @@
-// src/components/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function base64UrlDecode(str) {
   str = str.replace(/-/g, "+").replace(/_/g, "/");
@@ -11,26 +11,41 @@ function isTokenExpired(token) {
   try {
     const payload = base64UrlDecode(token.split(".")[1]);
     const now = Math.floor(Date.now() / 1000);
-    return payload.exp < now;     // true if expired
-  } catch (e) {
-    return true; // invalid token => treat as expired
+    return payload.exp < now;
+  } catch {
+    return true;
   }
 }
 
 export default function ProtectedRoute({ children }) {
-  const access_token = localStorage.getItem("jwtToken");
+  const token = localStorage.getItem("jwtToken");
+  const [valid, setValid] = useState(null);
 
-  // If no token, redirect
-  if (!access_token) {
+  // no token OR expired → logout
+  if (!token || isTokenExpired(token)) {
+    localStorage.removeItem("jwtToken");
     return <Navigate to="/login" replace />;
   }
 
-  // If token exists but is expired
-  if (isTokenExpired(access_token)) {
-    localStorage.removeItem("jwtToken"); // clean it
+  // ask backend if token is valid (user still exists)
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/validate", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => setValid(data.valid))
+      .catch(() => setValid(false));
+  }, [token]);
+
+  // waiting for backend check
+  if (valid === null) return <>Loading...</>;
+
+  // Backend says token invalid → logout
+  if (!valid) {
+    localStorage.removeItem("jwtToken");
     return <Navigate to="/login" replace />;
   }
 
-  // Token valid
+  // all good
   return children;
 }
